@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 '''
 Author: Randolph Sapp
 Info: Tool to rip images and transcript from bone script PDF
@@ -6,28 +8,30 @@ Info: Tool to rip images and transcript from bone script PDF
 import glob
 import json
 import os
-from parser import Parser
-import h5py
 import cv2 as cv
-from tablereader import TableReader
+from image_extraction.parser import Parser
+from image_extraction.tablereader import TableReader
 
 ROW_DESC = ['SectionHeader', 'CharNo', 'Script', 'ChnChar', 'Phonetic',
             'SpecimenNo', 'LCNo', 'Notes', 'SeqNo']
 CARRY = [True, True, False, False, True, False, True, False, False]
 
-for path in glob.glob("*.hdf5"):
-    name = path[:-5]
-    hdf5 = h5py.File(path, 'r')
-    pdf = open(name+'.pdf', 'rb')
+PPATHS = [os.path.splitext(x)[0] for x in glob.glob('*.pdf')]
+
+for path in glob.glob('*.pdf'):
+    name = os.path.splitext(path)[0]
+    if not os.path.isdir(name):
+        continue
+    pdf = open(path, 'rb')
     pr = Parser(pdf)
-    outputdir = name+'_output'
+    outputdir = name+'-output'
     os.makedirs(outputdir, exist_ok=True)
     oldelements, oldtranscript = [], {}
     ARI = 0
-    for key, _ in enumerate(hdf5.keys()):
-        page = hdf5[str(key)][()]
+    for pi, impath in enumerate(sorted(glob.glob(name+'/*.png'))):
+        page = cv.imread(impath)
         tr = TableReader(page)
-        pr.read_page(key)
+        pr.read_page(pi)
         for ri in range(tr.numrows-1):
             row = tr.get_row(ri)
             rowdir = outputdir + '/' + str(ARI)

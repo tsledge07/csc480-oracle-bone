@@ -1,3 +1,6 @@
+# custom hidden stuff
+hidden/
+
 # hdf5 database files
 *.hdf5
 
