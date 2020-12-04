@@ -13,7 +13,7 @@ FILES = ['Script.png']
 
 # fetch directories to process
 for d in glob.glob('*-proc'):
-    # fetch rows to read through
+    # fetch row directories to read through
     for row in glob.glob(os.path.join(d, '*')):
         # process each file picked in FILES
         for f in FILES:
