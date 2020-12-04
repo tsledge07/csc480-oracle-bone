@@ -5,9 +5,7 @@ def insert(id, character, gif_url):
     cursor = sqliteConnection.cursor()
     print("Connected to BoneDB")
     sqlite_insert_query = """ INSERT INTO characters (id, character, gif_url) VALUES (?, ?, ?) """
-    print("Defining Tuple")
     data_tuple = (id, character, gif_url) 
-    print("Upload to DB")
     cursor.execute(sqlite_insert_query, data_tuple) # execute the query
     sqliteConnection.commit()
     print("Entry inserted corectly")
