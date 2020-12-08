@@ -21,9 +21,7 @@ function weapon() {
     }
   };
   
-  /**
-   * tests whether the passed fruit is sliced by the sword's swipe
-   */
+
   weapon.prototype.checkForSlice = function(chars) {
   
     if (chars.sliced || this.swipes.length < 2)
